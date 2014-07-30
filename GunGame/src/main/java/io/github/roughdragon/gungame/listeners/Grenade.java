@@ -3,7 +3,6 @@ package io.github.roughdragon.gungame.listeners;
 import io.github.roughdragon.gungame.Arena;
 import io.github.roughdragon.gungame.GunGame;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
@@ -24,22 +23,17 @@ public class Grenade implements Listener{
 		
 		ItemStack m = player.getItemInHand();
 		if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			/* if Player right clicked */
 			if(m.getType() == Material.SLIME_BALL) {
-				if(m.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "GRENADE!!!")) {
-					/* if Player right clicked a slime ball with name GRENADE!!! */
+				if(m.getItemMeta().getDisplayName().equals("§a§lGRENADE!")) {
 					for(Arena a : Arena.arenaObjects) {
 						if(a.getPlayers().contains(player.getName())) {
-							/* if Player is in an Arena */
 							if(a.isInGame()) {
-								/* if Arena is in game */
 								e.setCancelled(true);
 								final Item grenade = world.dropItem(player.getEyeLocation(), new ItemStack(Material.SLIME_BALL));
 								grenade.setVelocity(player.getEyeLocation().getDirection());
 								GunGame.instance.getServer().getScheduler().scheduleAsyncDelayedTask(GunGame.instance, new Runnable() {
 									@Override
 									public void run() {
-										//grenade.getWorld().createExplosion(grenade.getLocation(), 1.0F, false);
 										double x = grenade.getLocation().getX();
 										double y = grenade.getLocation().getY();
 										double z = grenade.getLocation().getZ();
@@ -48,12 +42,12 @@ public class Grenade implements Listener{
 									}
 								}, 40L);
 
-							} else return;
-						} else return;
+							}
+						}
 					}
-				} else return;
-			} else return;
-		} else return;
+				}
+			}
+		}
 	}
 	
 }
