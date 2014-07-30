@@ -1,3 +1,8 @@
 name: GunGame
 main: io.github.roughdragon.gungame.GunGame
 version: 0.1
+commands:
+  gun:
+    description: Shows all [GunGame] commands.
+  gungame:
+    description: Shows all [GunGame] commands.

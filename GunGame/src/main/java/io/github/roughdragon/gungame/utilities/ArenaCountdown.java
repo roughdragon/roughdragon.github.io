@@ -20,7 +20,7 @@ public class ArenaCountdown extends BukkitRunnable {
 		
 		if(a.timeLeft == 0) {
 			/* Countdown Over. Start Game! */
-			ChatUtilities.powerballBroadcast(a, "The game has started!");
+			ChatUtilities.gunGameBroadcast(a, "The game has started!");
 			for(String p : a.getPlayers()) {	
 				Player player = Bukkit.getPlayer(p);
 				player.playSound(player.getLocation(), Sound.BLAZE_DEATH, 10, 1);
@@ -32,18 +32,18 @@ public class ArenaCountdown extends BukkitRunnable {
 		
 		if(a.getPlayers().size() < a.getMaxPlayers()) {
 			/* Not Enough Players. Stop Countdown */
-			ChatUtilities.powerballBroadcast(a, "Not enough players to begin! Countdown stopped.");
+			ChatUtilities.gunGameBroadcast(a, "Not enough players to begin! Countdown stopped.");
 			a.stopCountdown();
 		}
 		
-		if(a.timeLeft == 20 || a.timeLeft == 15 || a.timeLeft == 10) {
+		if(a.timeLeft == 30 || a.timeLeft == 20 || a.timeLeft == 15 || a.timeLeft == 10) {
 			/* Time Left Is 20, 15, 10. Broadcast Time */	
-			ChatUtilities.powerballBroadcast(a, a.timeLeft + " seconds left!");
+			ChatUtilities.gunGameBroadcast(a, a.timeLeft + " seconds left!");
 		}
 		
 		if(a.timeLeft <= 5 && a.timeLeft > 0) {
 			/* Time Left Is 5, 4, 3, 2, 1. Broadcast Time */
-			ChatUtilities.powerballBroadcast(a, a.timeLeft + " seconds left!");
+			ChatUtilities.gunGameBroadcast(a, a.timeLeft + " seconds left!");
 			for(String p : a.getPlayers()) {	
 				Player player = Bukkit.getPlayer(p);
 				player.playSound(player.getLocation(), Sound.ANVIL_LAND, 10, 1);

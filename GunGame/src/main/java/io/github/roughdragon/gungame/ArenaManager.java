@@ -1,12 +1,13 @@
 package io.github.roughdragon.gungame;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import io.github.roughdragon.gungame.Arena.Team;
 import io.github.roughdragon.gungame.utilities.ChatUtilities;
 import io.github.roughdragon.gungame.utilities.ChatUtilities.SendType;
+import io.github.roughdragon.gungame.utilities.Kits;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -200,7 +201,7 @@ public class ArenaManager {
 		player.teleport(arena.getJoinLocation()); /* Teleport Player To Arena Lobby */	
 		
 		int playersLeft = arena.getMaxPlayers() - arena.getPlayers().size(); /* Players' Needed To Start Game */
-		ChatUtilities.powerballBroadcast(arena, player.getName() + " has joined the Arena! We need " + playersLeft + " more player(s) to start the game!");
+		ChatUtilities.gunGameBroadcast(arena, player.getName() + " has joined the Arena! We need " + playersLeft + " more player(s) to start the game!");
 		
 		if(playersLeft == 0) { startArena(arenaName); } /* Start Arena If 0 Players Needed */
 		
@@ -277,7 +278,7 @@ public class ArenaManager {
 		
 		player.teleport(arena.getEndLocation()); /* Teleport Player To Hub */
 		
-		ChatUtilities.powerballBroadcast(arena, player.getName() + " has left the Arena! There are " + arena.getPlayers().size() + " player(s) currently left!");
+		ChatUtilities.gunGameBroadcast(arena, player.getName() + " has left the Arena! There are " + arena.getPlayers().size() + " player(s) currently left!");
 		ChatUtilities.sendMessage(player, SendType.NORMAL, "You have left the Arena!");
 	}
 
@@ -301,7 +302,7 @@ public class ArenaManager {
 					arena.setInGame(true);
 
 					int i = 0;
-					for (String s: arena.getPlayers()) {//Loop through every player in the arena
+					for (String s : arena.getPlayers()) {//Loop through every player in the arena
 
 						if (i < arena.getPlayers().size() / 2) {
 							// Put player on Red Team
@@ -342,6 +343,15 @@ public class ArenaManager {
 						player.getInventory().addItem(grenade);
 						player.updateInventory();
 
+						Kits chosenKit;
+						try {
+							chosenKit = Kits.getKit(arena.playerKit.get(player.getName()).getName());
+						} catch (NullPointerException e) {
+							chosenKit = Kits.getKit("Swordsman");
+						}
+						
+						giveKit(player, chosenKit.getName());
+						
 						arena.stopCountdown();
 						arena.countdownDone = false;
 						
@@ -650,12 +660,15 @@ public class ArenaManager {
 			ChatUtilities.sendMessage(player, SendType.ERROR, "The Arena you have specified does not exist!");
 			return;
 		}
-		
-		startArena(arenaName);
-		ChatUtilities.sendMessage(player, SendType.GOOD, "You have FORCE STARTED Arena " + arenaName + "!");
+		if(getArena(arenaName).countdownStarted == true) {
+			ChatUtilities.sendMessage(player, SendType.ERROR, "The Arena you have specified is already starting!");
+			return;
+		}
 		
 		Arena arena = getArena(arenaName);
-		ChatUtilities.powerballBroadcast(arena, "The Arena has been FORCE STARTED by " + player.getName().toString() + "!");
+		ChatUtilities.gunGameBroadcast(arena, "The Arena has been FORCE STARTED by " + player.getName().toString() + "!");
+		startArena(arenaName);
+		ChatUtilities.sendMessage(player, SendType.GOOD, "You have FORCE STARTED Arena " + arenaName + "!");
 	}
 	
 	public void forceEnd(Player player, String arenaName) {
@@ -663,12 +676,15 @@ public class ArenaManager {
 			ChatUtilities.sendMessage(player, SendType.ERROR, "The Arena you have specified does not exist!");
 			return;
 		}
-		
-		endArena(player, arenaName);
-		ChatUtilities.sendMessage(player, SendType.GOOD, "You have FORCE ENDED Arena " + arenaName + "!");
+		if(getArena(arenaName).isInGame() == false) {
+			ChatUtilities.sendMessage(player, SendType.ERROR, "The Arena you have specified is not in game!");
+			return;
+		}
 		
 		Arena arena = getArena(arenaName);
-		ChatUtilities.powerballBroadcast(arena, "The Arena has been FORCE ENDED by " + player.getName().toString() + "!");
+		ChatUtilities.gunGameBroadcast(arena, "The Arena has been FORCE ENDED by " + player.getName().toString() + "!");
+		endArena(player, arenaName);
+		ChatUtilities.sendMessage(player, SendType.GOOD, "You have FORCE ENDED Arena " + arenaName + "!");
 	}
 	
 	public void setStatus(Player player, String arenaName, String status) {
@@ -828,6 +844,39 @@ public class ArenaManager {
 			return;
 		}
 		
+	}
+	
+	public void setKit(Player player, String kitName) {
+		Arena arena = getArenabyPlayer(player);
+		if(arena == null) {
+			return;
+		}
+		if(Kits.isKit(kitName) == false) {
+			ChatUtilities.sendMessage(player, SendType.ERROR, "The Kit you have specified does not exist!");
+			return;
+		}
+		Kits chosenKit = Kits.getKit(kitName);
+		
+		arena.playerKit.put(player.getName(), chosenKit);
+		ChatUtilities.sendMessage(player, SendType.GOOD, "You have selected kit " + chosenKit.getName() + "!");
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void giveKit(Player player, String kitName) {
+		Arena arena = getArenabyPlayer(player);
+		if(arena == null) {
+			return;
+		}
+		if(Kits.isKit(kitName) == false) {
+			ChatUtilities.sendMessage(player, SendType.ERROR, "The Kit you have specified does not exist!");
+			return;
+		}
+		Kits chosenKit = Kits.getKit(kitName);
+		
+		for(ItemStack is : chosenKit.kitItems) {
+			player.getInventory().addItem(is);
+			player.updateInventory();
+		}
 	}
 		
 }
