@@ -1,18 +1,15 @@
 package io.github.roughdragon.gungame;
 
-import io.github.roughdragon.gungame.listeners.DamageHandler;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.logging.Logger;
+
 import io.github.roughdragon.gungame.listeners.Grenade;
 import io.github.roughdragon.gungame.listeners.PlayerInventoryManipulation;
 import io.github.roughdragon.gungame.listeners.PlayerShootEvent;
 import io.github.roughdragon.gungame.utilities.ChatUtilities;
 import io.github.roughdragon.gungame.utilities.ChatUtilities.SendType;
-import io.github.roughdragon.gungame.utilities.Kits;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -34,7 +31,7 @@ public class GunGame extends JavaPlugin implements Listener {
 	public void onEnable() {
 		instance = this;
 		
-		this.logger.info("[GunGame] has been enabled!");
+		this.logger.info("[PowerBall] has been enabled!");
 		
 		File configFile = new File(this.getDataFolder(), "config.yml");
 		if(configFile.exists())
@@ -42,7 +39,6 @@ public class GunGame extends JavaPlugin implements Listener {
 		
 		createMainConfig();
 		registerListeners();
-		setupKits();
 
 	}
 	
@@ -50,7 +46,7 @@ public class GunGame extends JavaPlugin implements Listener {
 	public void onDisable() {
 		instance = null;
 		
-		this.logger.info("[GunGame] has been disabled!");
+		this.logger.info("[PowerBall] has been disabled!");
 		
 		saveConfig();
 	}
@@ -58,11 +54,11 @@ public class GunGame extends JavaPlugin implements Listener {
 	public void createMainConfig() {
 		File configFile = new File(this.getDataFolder(), "config.yml");
 		if(configFile.exists()) {
-			this.logger.info("[GunGame] Config file found, loading...");
+			this.logger.info("[PowerBall] Config file found, loading...");
 			return;
 		}
 		
-		this.logger.info("[GunGame] Config file not found, creating...");
+		this.logger.info("[PowerBall] Config file not found, creating...");
 		try {
 			FileOutputStream writer = new FileOutputStream(new File(getDataFolder() + File.separator + "config.yml"));
 			InputStream out = this.getResource("config.yml");
@@ -75,7 +71,7 @@ public class GunGame extends JavaPlugin implements Listener {
 			writer.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.logger.info("[GunGame] Error Occured. Config File not created!");
+			this.logger.info("[PowerBall] Error Occured. Config File not created!");
 		}
 	}
 	
@@ -86,35 +82,24 @@ public class GunGame extends JavaPlugin implements Listener {
 		pm.registerEvents(new PlayerShootEvent(), this);
 		pm.registerEvents(new Grenade(), this);
 		pm.registerEvents(new PlayerInventoryManipulation(), this);
-		pm.registerEvents(new DamageHandler(), this);
 	}
 		
-	public void setupKits() {
-		new Kits("Grenadier", Arrays.asList("341:4:§a§lGRENADE!", "293:1:§5Diamond Gun"), 341);
-		new Kits("Swordsman", Arrays.asList("276:1:§4Diamond Blade"), 293);
-		new Kits("Archer", Arrays.asList("261:1:§eSniper", "262:64:Arrows"), 261);
-	}
-	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if(!(sender instanceof Player)) {
-			sender.sendMessage("Slow down! You must be a player to send [GunGame] commands");
-			return true;
-		}
+		if(!(sender instanceof Player)) sender.sendMessage("Slow down! You must be a player to send [PowerBall] commands");
 		
 		Player p = (Player) sender;
 		
-		if(cmd.getName().equalsIgnoreCase("Gun") || cmd.getName().equalsIgnoreCase("GunGame")) {
+		if(cmd.getName().equalsIgnoreCase("pb") || cmd.getName().equalsIgnoreCase("powerball")) {
 			
 			if(args.length == 0) {
-				ChatUtilities.sendGunGameHelp(p);
+				ChatUtilities.sendPowerBallHelp(p);
 				return true;
 			}
 			
 			if(args[0].equalsIgnoreCase("reload")) {
 				getServer().getPluginManager().disablePlugin(this);
 				getServer().getPluginManager().enablePlugin(this);
-				ChatUtilities.sendMessage(p, SendType.GOOD, "GunGame has been reloaded!");
-				return true;
+				ChatUtilities.sendMessage(p, SendType.GOOD, "PowerBall has been reloaded!");
 			}		
 			else if(args[0].equalsIgnoreCase("join")) {											
 				if(args.length == 2) {
@@ -122,8 +107,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				} 
 				else if(args.length == 1 || args.length > 2) { 
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /gun join <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /pb join <arenaName>");
+					return false;
 				}	
 			}
 			else if(args[0].equalsIgnoreCase("leave")) {
@@ -136,8 +121,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length <= 2 || args.length > 3) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /gun create <arenaName> <maxPlayers>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /pb create <arenaName> <maxPlayers>");
+					return false;
 				}	
 			}
 			else if(args[0].equalsIgnoreCase("remove")) {
@@ -146,8 +131,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length == 1 || args.length > 2) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /gun remove <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /pb remove <arenaName>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("forceStart")) {
@@ -156,8 +141,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length == 1 || args.length > 2) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /gun forceStart <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /pb forceStart <arenaName>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("forceEnd")) {
@@ -166,8 +151,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length == 1 || args.length > 2) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /gun forceEnd <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /pb forceEnd <arenaName>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("enable")) {
@@ -176,8 +161,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length <= 2 || args.length > 3) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /gun enable <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /pb enable <arenaName>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("disable")) {
@@ -186,8 +171,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length <= 2 || args.length > 3) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /gun disable <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /pb disable <arenaName>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("setJoinLoc")) {
@@ -196,8 +181,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length == 1 || args.length > 2) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /gun setJoinLoc <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /pb setJoinLoc <arenaName>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("setEndLoc")) {
@@ -206,8 +191,8 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length == 1 || args.length > 2) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /gun setEndLoc <arenaName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS,"Correct Usage: /pb setEndLoc <arenaName>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("setTeamSpawn")) {
@@ -216,32 +201,17 @@ public class GunGame extends JavaPlugin implements Listener {
 					return true;
 				}
 				else if(args.length <= 2 || args.length > 3) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /gun setTeamSpawn <arenaName> <team>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /pb setTeamSpawn <arenaName> <team>");
+					return false;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("removeTeamSpawn")) {
 				if(args.length == 4) {
 					ArenaManager.getManager().removeTeamSpawn(p, args[1], args[2], args[3]);
-					return true;
 				}
 				else if(args.length <= 3 || args.length > 4) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /gun removeTeamSpawn <arenaName> <team> <spawnNumber>");
-					return true;
-				}
-			}
-			else if(args[0].equalsIgnoreCase("kits")) {
-				if(args.length == 2) {
-					ArenaManager.getManager().setKit(p, args[1]);
-					return true;
-				}
-				else if(args.length == 1) {
-					ChatUtilities.sendKitList(p);
-					return true;
-				}
-				else if(args.length > 2) {
-					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /gun kits <kitName>");
-					return true;
+					ChatUtilities.sendMessage(p, SendType.INVALIDARGS, "Correct Usage: /pb removeTeamSpawn <arenaName> <team> <spawnNumber>");
+					return false;
 				}
 			}
 		}

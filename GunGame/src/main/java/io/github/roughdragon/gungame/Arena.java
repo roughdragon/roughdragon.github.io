@@ -1,10 +1,8 @@
 package io.github.roughdragon.gungame;
 
-import io.github.roughdragon.gungame.utilities.ArenaCountdown;
-import io.github.roughdragon.gungame.utilities.Kits;
-
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import io.github.roughdragon.gungame.utilities.ArenaCountdown;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,10 +31,7 @@ public class Arena {
 	
 	public int countdownID;
 	public boolean countdownDone;
-	public boolean countdownStarted;
 	public int timeLeft;
-	
-	public HashMap<String, Kits> playerKit = new HashMap<String, Kits>();
 
 	//Now for a Constructor:
 	public Arena (String arenaName, /* Location joinLocation, Location startLocation, Location endLocation, */ int maxPlayers) { //So basicly: Arena myArena = new Arena("My Arena", joinLocation, startLocation, endLocation, 17)
@@ -150,13 +145,11 @@ public class Arena {
 	}
 	
 	public void startCountdown() {
-		timeLeft = 31;
-		countdownStarted = true;
+		timeLeft = 30;
 		countdownID = GunGame.instance.getServer().getScheduler().scheduleSyncRepeatingTask(GunGame.instance, new ArenaCountdown(this), 20l, 20l);
 	}
 	
 	public void stopCountdown()  {
-		countdownStarted = false;
 		GunGame.instance.getServer().getScheduler().cancelTask(countdownID);
 	}
 
