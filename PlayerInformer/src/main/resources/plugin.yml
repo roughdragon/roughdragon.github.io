@@ -1,0 +1,20 @@
+name: PlayerInformer
+main: io.github.roughdragon.playerinformer.PlayerInformer
+version: 0.1
+commands:
+  ban:
+    description: Ban <Player> <Reason>
+    permission: playerinformer.ban
+  kick:
+    description: Kick <Player> <Reason>
+    permission: playerinformer.kick
+  tempban:
+    description: Tempban <Player> <Time> <S|M|H|D> <Reason>
+    permission: playerinformer.tempban
+permissions:
+  playerinformer.ban:
+    description: Gives access to Ban players.
+  playerinformer.kick:
+    description: Gives access to Kick players.
+  playerinformer.tempban:
+    description: Gives access to Tempban players.
