@@ -8,17 +8,17 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class WorldChange implements Listener {
 
 	@EventHandler
-	public void worldChange(PlayerChangedWorldEvent event) {
+	public void worldChange(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
-		World world = event.getPlayer().getWorld();
+		World world = event.getTo().getWorld();
 		World MGworld = Bukkit.getServer().getWorld(MinigameTokens.getInstance().getConfig().getString("worldName"));
-		
-		if(world == MGworld) {
+				
+		if(world.getName() == MGworld.getName()) {
 			player.sendMessage("[MinigameTokens] You have entered the Minigame World!");
 			TokenManager.getManager().setupScoreboard(player);
 			TokenManager.getManager().updateScoreboard(player);

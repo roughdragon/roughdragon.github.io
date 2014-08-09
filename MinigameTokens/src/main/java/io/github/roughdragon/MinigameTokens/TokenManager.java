@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 public class TokenManager {
 
-	public static TokenManager manager;
+	private static TokenManager manager = new TokenManager();
 	public static TokenManager getManager() { return manager; }
 	
 	public int getTokens(Player player) {
@@ -70,13 +70,14 @@ public class TokenManager {
 		updateScoreboard(player);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void updateScoreboard(Player player) {
 		Scoreboard scoreboard = player.getScoreboard();
-		Objective objective = scoreboard.getObjective(ChatColor.YELLOW + "Tokens");
+		Objective objective = scoreboard.getObjective("tokens");
 		
 		int tokens = MinigameTokens.getInstance().getTokensConfig().getInt(player.getUniqueId().toString());
 		
-		objective.getScore(ChatColor.GREEN + "My Tokens:").setScore(tokens);
+		objective.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "My Tokens:")).setScore(tokens);
 	}
 	
 }

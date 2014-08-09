@@ -23,6 +23,7 @@ public class TokenCommand implements CommandExecutor {
 			if(args.length == 0) {
 				int currentTokens = MinigameTokens.getInstance().getTokensConfig().getInt(player.getUniqueId().toString());
 				player.sendMessage(ChatColor.WHITE + "You have " + ChatColor.GRAY + "[" + ChatColor.GREEN + currentTokens + ChatColor.GRAY + "]" + ChatColor.WHITE + " tokens!");
+				TokenManager.getManager().updateScoreboard(player);
 				return true;
 			}
 			if(args.length == 1) {
@@ -41,6 +42,7 @@ public class TokenCommand implements CommandExecutor {
 						}
 						TokenManager.getManager().resetTokens(resetPlayer);
 						player.sendMessage(ChatColor.YELLOW + "You have reset " + ChatColor.GRAY + "[" + ChatColor.GREEN + resetPlayer.getName() + "'s" + ChatColor.GRAY + "]" + ChatColor.YELLOW + " tokens!");
+						TokenManager.getManager().updateScoreboard(resetPlayer);
 						return true;
 					} else {
 						player.sendMessage(ChatColor.RED + "You do not have the required permission to use this command.");
@@ -56,6 +58,7 @@ public class TokenCommand implements CommandExecutor {
 						}
 						int getTokens = TokenManager.getManager().getTokens(getPlayer);
 						player.sendMessage(ChatColor.GRAY + "[" + ChatColor.GREEN + getPlayer.getName() + ChatColor.GRAY + "]" + ChatColor.YELLOW + " has " + ChatColor.GRAY + "[" + ChatColor.GREEN + getTokens + ChatColor.GRAY + "]" + ChatColor.YELLOW + " tokens!");
+						TokenManager.getManager().updateScoreboard(getPlayer);
 						return true;
 					} else {
 						player.sendMessage(ChatColor.RED + "You do not have the required permission to use this command.");
@@ -83,6 +86,7 @@ public class TokenCommand implements CommandExecutor {
 						}
 						TokenManager.getManager().giveTokens(givePlayer, amount);
 						player.sendMessage(ChatColor.YELLOW + "You have given " + ChatColor.GRAY + "[" + ChatColor.GREEN + amount + ChatColor.GRAY + "]" + ChatColor.YELLOW + " tokens to " + ChatColor.GRAY + "[" + ChatColor.GREEN + givePlayer.getName() + ChatColor.GRAY + "]" + ChatColor.YELLOW + "!");
+						TokenManager.getManager().updateScoreboard(givePlayer);
 						return true;
 					} else {
 						player.sendMessage(ChatColor.RED + "You do not have the required permission to use this command.");
@@ -105,6 +109,7 @@ public class TokenCommand implements CommandExecutor {
 						}
 						TokenManager.getManager().setTokens(setPlayer, amount);
 						player.sendMessage(ChatColor.YELLOW + "You have set " + ChatColor.GRAY + "[" + ChatColor.GREEN + setPlayer.getName() + "'s" + ChatColor.GRAY + "]" + ChatColor.YELLOW + " tokens to " + ChatColor.GRAY + "[" + ChatColor.GREEN + amount + ChatColor.GRAY + "]" + ChatColor.YELLOW + "!");
+						TokenManager.getManager().updateScoreboard(setPlayer);
 						return true;
 					} else {
 						player.sendMessage(ChatColor.RED + "You do not have the required permission to use this command.");

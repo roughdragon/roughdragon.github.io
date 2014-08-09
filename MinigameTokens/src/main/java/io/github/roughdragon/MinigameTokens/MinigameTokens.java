@@ -27,6 +27,7 @@ public class MinigameTokens extends JavaPlugin {
 		instance = this;
 		getLogger().info(" has been Enabled!");
 		
+		registerListeners();
 		createConfig();
 		saveTokensConfig();
 		
@@ -41,11 +42,15 @@ public class MinigameTokens extends JavaPlugin {
 	
 	public void registerListeners() {
 		PluginManager pm = Bukkit.getServer().getPluginManager();
-		pm.registerEvents(new PlayerKilled(), this);
-		pm.registerEvents(new WorldChange(), this);
+		pm.registerEvents(new PlayerKilled(), instance);
+		pm.registerEvents(new WorldChange(), instance);
 	}
 	
 	public void createConfig() {
+		if(!getDataFolder().exists()) {
+			try { getDataFolder().createNewFile(); } 
+			catch (IOException ex) { getLogger().severe("[MinigameTokens] Internal Error Occured! Please Send A Bug Report To RoughDragon."); }
+		}
 		File configFile = new File(this.getDataFolder(), "config.yml");
 		if(configFile.exists()) {
 			getLogger().info("[MinigameTokens] Config file found, loading...");
