@@ -1,0 +1,18 @@
+#
+# Minigame Tokens v0.1 by RoughDragon
+# 
+
+# The world name where Tokens are active. eg. Minigames
+worldName: Minigames
+
+# Base Tokens. Amount of Tokens Players start off with.
+baseTokens: 0
+
+# Enable Scoreboard showing Tokens.
+enableScoreboard: true
+
+# Killing Players gives Tokens.
+playerKillTokens: true
+
+# Tokens given per Kill. 'playerKillTokens' must be True.
+tokensPerKill: 1

@@ -1,0 +1,28 @@
+name: MinigameTokens
+main: io.github.roughdragon.MinigameTokens.MinigameTokens
+version: 0.1
+commands:
+  tokens:
+    description: See MinigameTokens Help.
+permissions:
+  mgtokens.*:
+    description: Gives access to all commands in MinigameTokens.
+    default: op
+    children:
+      mgtokens.give: true
+      mgtokens.set: true
+      mgtokens.reset: true
+      mgtokens.use: true
+      mgtokens.get: true
+  mgtokens.give:
+    description: Gives access to give a player tokens.
+    default: op
+  mgtokens.set:
+    description: Gives access to set a player's token amount. 
+    default: op
+  mgtokens.reset:
+    description: Gives access to reset a player's token amount.
+    default: op
+  mgtokens.get:
+    description: Gives access to see another player's token amount.
+    default: true
