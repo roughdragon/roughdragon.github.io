@@ -32,10 +32,6 @@ public class TokenManager {
 	
 	public void takeTokens(Player player, int amountOfTokens) {
 		int currentTokens = getTokens(player);
-		if(currentTokens < amountOfTokens) {
-			player.sendMessage("[MinigameTokens] You do not have enough Tokens!");
-			return;
-		}
 		int newTokens = currentTokens - amountOfTokens;
 		setTokens(player, newTokens);
 	}
@@ -57,6 +53,11 @@ public class TokenManager {
 		}
 		MinigameTokens.getInstance().getTokensConfig().set(UUIDstring, baseTokens);
 		MinigameTokens.getInstance().saveTokensConfig();
+	}
+	
+	public boolean enoughTokens(Player player, int tokens) {
+		if(getTokens(player) >= tokens) { return true; }
+		return false;
 	}
 	
 	public void setupScoreboard(final Player player) {

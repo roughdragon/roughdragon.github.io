@@ -19,9 +19,11 @@ public class WorldChange implements Listener {
 		World MGworld = Bukkit.getServer().getWorld(MinigameTokens.getInstance().getConfig().getString("worldName"));
 				
 		if(world.getName() == MGworld.getName()) {
-			player.sendMessage("[MinigameTokens] You have entered the Minigame World!");
-			TokenManager.getManager().setupScoreboard(player);
-			TokenManager.getManager().updateScoreboard(player);
+			player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			if(MinigameTokens.getInstance().getConfig().getBoolean("enableScoreboard") == true) {
+				TokenManager.getManager().setupScoreboard(player);
+				TokenManager.getManager().updateScoreboard(player);
+			}
 		}
 	}
 }

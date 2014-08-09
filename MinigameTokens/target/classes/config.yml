@@ -1,6 +1,13 @@
 #
 # Minigame Tokens v0.1 by RoughDragon
-# 
+#
+# List of Permissions:
+# mgtokens.* - Gives access to all MinigameTokens commands.
+# mgtokens.give - Gives access to give Tokens.
+# mgtokens.set - Gives access to set Tokens.
+# mgtokens.reset - Gives access to reset Tokens to 'baseTokens'.
+# mgtokens.get - Gives access to see other player's tokens.
+#
 
 # The world name where Tokens are active. eg. Minigames
 worldName: Minigames
